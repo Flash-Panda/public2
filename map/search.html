@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1.0, user-scalable=0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection"content="telephone=no, email=no" />
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="MobileOptimized" content="320"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="x5-orientation" content="portrait"/>
+    <meta name="full-screen" content="yes"/>
+    <meta name="x5-fullscreen" content="true">
+    <meta name="browsermode" content="application"/>
+    <meta name="x5-page-mode" content="app"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
+    <title>Flash Panda</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body{
+          background: #eaeaea;
+      }
+      .search_con{
+        position: relative;
+        padding: 10px 58px 10px 15px;
+        height: 47px;
+        background: #fff;
+        border-bottom: 1px solid #d1d1d1;
+      }
+      .search_con:before{
+        position: absolute;
+        top: 10px;
+        left: 15px;
+        width: 30px;
+        height: 26px;
+        content: '';
+        background: url(http://wx.flashpanda.cn/wx/static/image/search@2x.png) no-repeat center / 20px;
+      }
+      .search_con input {
+        display: block;
+        padding-left: 33px;
+        width: 100%;
+        height: 26px;
+        font-size: 13px;
+        border: 0;
+        outline: 0;
+        border-radius: 3px;
+        background: #efefef;
+      }
+      
+      .list{
+        padding: 0 10px;
+        list-style: none;
+        box-shadow: 0px 0 10px #888;
+        background: #fefefe;
+      }
+      .list li{
+        padding-left: 20px;
+        height: 42px;
+        color: #666;
+        font-size: 12px;
+        line-height: 42px;
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        background: url(http://wx.flashpanda.cn/wx/static/image/location1@2x.png) no-repeat left center / 11px 15px;
+      }
+      
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="http://map.qq.com/api/js?v=2.exp&key=DFKBZ-KCVWK-UJZJB-ARBJM-ALTNZ-DIBWH" charset="utf-8"></script>
+</head>
+<body>
+    <div class="search_con">
+        <input id="search" type="text">
+    </div>
+    <ul class="list"></ul>
+</body>
+<script>
+  
+    var time_id, data, list = $('.list');
+    
+    
+    
+    function applyHtml(d) {
+        var h = '';
+        for(var i = 0, len = d.length; i < len; i++){
+            h += '<li data-key="' + i + '">' + d[i]['address'] + '</li>';
+        }
+      list.html(h);
+    }
+    
+    function search(t) {
+        $.ajax({
+            type : 'get',
+            dataType: "jsonp",
+            url : 'http://apis.map.qq.com/ws/place/v1/suggestion',
+            data : {
+                key : 'DFKBZ-KCVWK-UJZJB-ARBJM-ALTNZ-DIBWH',
+                output : 'jsonp',
+                keyword : t,
+            },
+            success : function (s) {
+                clearTimeout(time_id);
+                time_id = undefined;
+                if(s.status == 0) {
+                    data = s.data;
+                    applyHtml(data);
+                }
+            }
+        })
+    }
+    
+    
+    $('#search').keydown(function(){
+        var t = this.value;
+        if(time_id){
+            clearTimeout(time_id)
+        }
+        if(t !== ''){
+            time_id = setTimeout(function () {
+                search(t);
+            },500)
+        }
+        list.html('')
+    });
+    
+    list.on('click', 'li', function () {
+        var map_data = data[$(this).data('key')];
+        console.log(map_data);
+        alert('address:' + map_data.title + ' location:' + map_data.location.lat + ',' + map_data.location.lng)
+    })
+    
+</script>
+</html>

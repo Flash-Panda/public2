@@ -1,50 +1,42 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+  <div class="swiper-page" v-title data-title="swiper">
+    <p>正常swiper</p>
+    <x-swiper :items='items' :styles="{height: '200px'}" @change="changeHandle"></x-swiper>
+    <p>缩略swiper</p>
+    <x-swiper type='thum' :items='items' :styles="{height: '240px'}"></x-swiper>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  import xSwiper from './swipe/index.vue'
+    export default {
+        data () {
+            return {
+                items: [
+                    'http://science.china.com.cn/images/attachement/jpg/site555/20161027/e89a8ffb1393197b9fbf24.JPG',
+                    'http://science.china.com.cn/images/attachement/jpg/site555/20161027/e89a8ffb1393197b9fbf24.JPG',
+                    'http://science.china.com.cn/images/attachement/jpg/site555/20161027/e89a8ffb1393197b9fbf24.JPG',
+                    ],
+            }
+        },
+        components: {
+            xSwiper
+        },
+        methods: {
+            changeHandle (index) {
+                //console.log(index);
+            }
+        }
     }
-  }
-}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+  .swiper-page {
+    height: auto;
+    text-align: center;
+   
+  }
+  p {
+    margin: 10px 0;
+  }
 </style>
